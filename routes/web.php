@@ -6,7 +6,7 @@ Route::resource('tasks', TasksController::class);
 
 // トップページをタスク一覧に設定
 Route::redirect('/', '/tasks');
-
+Route::get('/', [TasksController::class, 'index']);
 /*
 |--------------------------------------------------------------------------
 | Web Routes
