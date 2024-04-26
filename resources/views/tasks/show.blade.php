@@ -16,4 +16,9 @@
 
     {{-- メッセージ編集ページへのリンク --}}
 　　<a class="btn btn-primary" href="{{ route('tasks.edit', $task->id) }}">編集</a>
+　　<form method="POST" action="{{ route('tasks.destroy', $task->id) }}" onsubmit="return confirm('本当に削除しますか？')">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger">削除</button>
+</form>
 @endsection

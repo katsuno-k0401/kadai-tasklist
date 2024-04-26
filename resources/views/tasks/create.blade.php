@@ -11,7 +11,7 @@
         <form action="{{ route('tasks.store') }}" method="POST">
 
             @csrf
-
+                
 　　　　　　<div class="form-control my-4">
                 <label for="content">タスク:</label>
                 <input type="text" class="input input-bordered w-full"style="width: 512px;" id="content" name="content" value="{{ isset($task) ? $task->content : '' }}" required>
@@ -26,6 +26,7 @@
                    @if ($errors->has('status'))
             <div class="alert alert-danger mt-2">{{ $errors->first('status') }}</div>
             @endif
+            
                 
             </div>
 

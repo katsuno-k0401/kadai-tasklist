@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
 
 class TasksController extends Controller
 {
@@ -31,6 +32,9 @@ class TasksController extends Controller
 
         // メッセージを作成
         $task = new Task;
+        // 現在認証しているユーザーのIDを取得
+        $id = Auth::id();
+        $task->user_ID=$id;
         $task->content = $request->content;    // 追加
         $task->status = $request->status;
         $task->save();
@@ -42,6 +46,10 @@ class TasksController extends Controller
     public function show($id)
     {
         $task = Task::findOrFail($id);
+        // タスクのユーザーIDとログインユーザーのIDを比較し、異なる場合はトップページにリダイレクト
+    if (!Auth::check() ||$task->user_id !== Auth::id()) {
+        return redirect()->route('tasks.index')->with('error', 'You are not authorized to access this task.');
+    }
         return view('tasks.show', compact('task'));
     }
 
@@ -49,6 +57,10 @@ class TasksController extends Controller
     public function edit($id)
     {
         $task = Task::findOrFail($id);
+        // タスクのユーザーIDとログインユーザーのIDを比較し、異なる場合はトップページにリダイレクト
+    if (!Auth::check() ||$task->user_id !== Auth::id()) {
+        return redirect()->route('tasks.index')->with('error', 'You are not authorized to edit this task.');
+    }
         return view('tasks.edit', compact('task'));
     }
 
@@ -80,6 +92,6 @@ class TasksController extends Controller
         $task = Task::findOrFail($id);
         $task->delete();
 
-        return redirect()->route('tasklist.index')->with('success', 'Task deleted successfully.');
+        return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
     }
 }
